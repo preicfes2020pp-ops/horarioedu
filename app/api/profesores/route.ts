@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient as createClienteAdmin } from "@supabase/supabase-js";
+import { createClient as createClienteAdmin, type SupabaseClient } from "@supabase/supabase-js";
 import { createClient, getPerfilActual } from "@/lib/supabase/server";
 import { registrarAuditoria } from "@/lib/auditoria";
 import { randomInt } from "crypto";
@@ -33,7 +33,7 @@ const MAX_PROFESORES_POR_IMPORTACION = 200;
 // Crea un profesor completo (auth + perfil + docente). Si cualquier paso
 // falla, revierte todo lo anterior para no dejar cuentas huérfanas.
 async function crearProfesorCompleto(
-  supabaseAdmin: ReturnType<typeof createClienteAdmin>,
+  supabaseAdmin: SupabaseClient,
   datos: { nombre: string; correo: string; area: string | null; institucionId: string }
 ): Promise<{ ok: true; correo: string; passwordTemporal: string } | { ok: false; correo: string; motivo: string }> {
   const passwordTemporal = generarPasswordTemporal();
